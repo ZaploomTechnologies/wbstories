@@ -1,4 +1,4 @@
-import DOMPurify from "isomorphic-dompurify";
+import sanitizeHtmlLib from "sanitize-html";
 
 // Tag/attribute allowlist matches the CKEditor 5 toolbar configured in
 // lib/ckeditor.config.ts (headings, lists, tables, images, media embed,
@@ -60,8 +60,13 @@ const ALLOWED_ATTR = [
  * HTML pulled from the database either, in case the allowlist changes later.
  */
 export function sanitizeHtml(dirtyHtml: string): string {
-  return DOMPurify.sanitize(dirtyHtml, {
-    ALLOWED_TAGS,
-    ALLOWED_ATTR,
+  return sanitizeHtmlLib(dirtyHtml, {
+    allowedTags: ALLOWED_TAGS,
+    allowedAttributes: {
+      "*": ALLOWED_ATTR,
+    },
+    allowedSchemesByTag: {
+      img: ["http", "https", "data"],
+    },
   });
 }
