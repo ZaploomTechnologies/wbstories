@@ -7,7 +7,7 @@ export const siteConfig = {
   name: "WB Stories",
   tagline: "Business Stories That Matter",
   description: "Insights, updates, and stories from the world of business.",
-  url: env.NEXT_PUBLIC_SITE_URL,
+  url: env.NEXT_PUBLIC_SITE_URL.replace(/\/+$/, ""),
   ogImage: "/images/og-default.png",
   builtBy: {
     name: "Zaploom Technologies",
