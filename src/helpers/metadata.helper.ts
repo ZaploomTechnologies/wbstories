@@ -5,7 +5,8 @@ interface BuildMetadataParams {
   title: string;
   description: string;
   path: string;
-  image?: string;
+  /** Omit to fall back to the site default image; pass `null` to show no image at all. */
+  image?: string | null;
   type?: "website" | "article";
   publishedTime?: string;
   modifiedTime?: string;
@@ -22,7 +23,8 @@ export function buildMetadata({
   modifiedTime,
 }: BuildMetadataParams): Metadata {
   const url = `${siteConfig.url}${path}`;
-  const ogImage = image ?? `${siteConfig.url}${siteConfig.ogImage}`;
+  const ogImage = image === null ? undefined : (image ?? `${siteConfig.url}${siteConfig.ogImage}`);
+  const images = ogImage ? [{ url: ogImage }] : undefined;
 
   const openGraph: Metadata["openGraph"] =
     type === "article"
@@ -32,7 +34,7 @@ export function buildMetadata({
           description,
           url,
           siteName: siteConfig.name,
-          images: [{ url: ogImage }],
+          images,
           ...(publishedTime ? { publishedTime } : {}),
           ...(modifiedTime ? { modifiedTime } : {}),
         }
@@ -42,7 +44,7 @@ export function buildMetadata({
           description,
           url,
           siteName: siteConfig.name,
-          images: [{ url: ogImage }],
+          images,
         };
 
   return {
@@ -51,10 +53,10 @@ export function buildMetadata({
     alternates: { canonical: url },
     openGraph,
     twitter: {
-      card: "summary_large_image",
+      card: ogImage ? "summary_large_image" : "summary",
       title,
       description,
-      images: [ogImage],
+      images: ogImage ? [ogImage] : undefined,
     },
   };
 }

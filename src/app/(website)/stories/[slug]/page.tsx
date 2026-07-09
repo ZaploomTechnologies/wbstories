@@ -9,7 +9,7 @@ import { Breadcrumb } from "@/components/shared/Breadcrumb";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { formatDate } from "@/helpers/date.helper";
 import { buildMetadata } from "@/helpers/metadata.helper";
-import { htmlToPlainText, truncateText } from "@/helpers/text.helper";
+import { htmlToPlainText, truncateText, youtubeThumbnailUrl } from "@/helpers/text.helper";
 import { siteConfig } from "@/config/site.config";
 
 interface StoryPageProps {
@@ -24,11 +24,15 @@ export async function generateMetadata({ params }: StoryPageProps): Promise<Meta
     return { title: "Story not found" };
   }
 
+  const image =
+    story.bannerImage?.url ??
+    (story.bannerVideo ? youtubeThumbnailUrl(story.bannerVideo.embedHtml) : null);
+
   return buildMetadata({
     title: story.title,
     description: truncateText(htmlToPlainText(story.content), 155),
     path: `/stories/${story.slug}`,
-    image: story.bannerImage?.url,
+    image,
     type: "article",
     publishedTime: story.publishedAt ?? undefined,
     modifiedTime: story.updatedAt,
@@ -78,25 +82,24 @@ export default async function StoryPage({ params }: StoryPageProps) {
         <article className="min-w-0">
           <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{story.title}</h1>
 
-          <div className="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
-            {story.publishedAt && (
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-4 text-sm text-muted-foreground">
+              {story.publishedAt && (
+                <span className="flex items-center gap-1">
+                  <Calendar className="size-4" />
+                  {formatDate(story.publishedAt)}
+                </span>
+              )}
               <span className="flex items-center gap-1">
-                <Calendar className="size-4" />
-                {formatDate(story.publishedAt)}
+                <Clock className="size-4" />
+                {story.readingTime} min read
               </span>
-            )}
-            <span className="flex items-center gap-1">
-              <Clock className="size-4" />
-              {story.readingTime} min read
-            </span>
+            </div>
+            <SocialShareButtons url={storyUrl} title={story.title} />
           </div>
 
           <div className="mt-8">
             <StoryContent html={story.content} />
-          </div>
-
-          <div className="mt-10 border-t pt-6">
-            <SocialShareButtons url={storyUrl} title={story.title} />
           </div>
         </article>
 

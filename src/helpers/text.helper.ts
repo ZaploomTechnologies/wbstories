@@ -45,3 +45,15 @@ export function firstVideoEmbedHtml(html: string): string | null {
   const match = stripBookmarkCards(html).match(VIDEO_EMBED_RE);
   return match ? match[0] : null;
 }
+
+const YOUTUBE_EMBED_SRC_RE = /youtube\.com\/embed\/([\w-]+)/i;
+
+/**
+ * Derives a static thumbnail URL from a YouTube embed's iframe src, for use as
+ * a share-preview image. Vimeo/Dailymotion/Spotify embeds have no equivalent
+ * predictable thumbnail URL, so those (and non-video banners) return null.
+ */
+export function youtubeThumbnailUrl(embedHtml: string): string | null {
+  const match = embedHtml.match(YOUTUBE_EMBED_SRC_RE);
+  return match ? `https://img.youtube.com/vi/${match[1]}/hqdefault.jpg` : null;
+}
