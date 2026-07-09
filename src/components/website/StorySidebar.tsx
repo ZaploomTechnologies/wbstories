@@ -28,7 +28,7 @@ export function StorySidebar({ upNext, related }: StorySidebarProps) {
 
       {related.length > 0 && (
         <section className="flex flex-col gap-4">
-          <h2 className="text-sm font-semibold tracking-tight">Related</h2>
+          <h2 className="text-sm font-semibold tracking-tight">More stories</h2>
           <div className="flex flex-col gap-4">
             {related.map((story) => (
               <StorySidebarCard
