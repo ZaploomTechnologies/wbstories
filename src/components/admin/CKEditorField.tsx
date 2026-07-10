@@ -5,7 +5,7 @@ import { BalloonEditor } from "ckeditor5";
 import "ckeditor5/ckeditor5.css";
 import "./ckeditor-medium-theme.css";
 import { CKEDITOR_PLUGINS, CKEDITOR_BASE_CONFIG } from "@/lib/ckeditor.config";
-import { CloudinaryUploadAdapterPlugin } from "@/lib/ckeditor-upload-adapter";
+import { ImageUploadAdapterPlugin } from "@/lib/ckeditor-upload-adapter";
 
 interface CKEditorFieldProps {
   initialData?: string;
@@ -23,7 +23,7 @@ export default function CKEditorField({ initialData = "", onChange }: CKEditorFi
         config={{
           ...CKEDITOR_BASE_CONFIG,
           plugins: CKEDITOR_PLUGINS,
-          extraPlugins: [CloudinaryUploadAdapterPlugin],
+          extraPlugins: [ImageUploadAdapterPlugin],
         }}
         onChange={(_event, editor) => {
           onChange(editor.getData());

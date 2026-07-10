@@ -1,4 +1,10 @@
-import { env } from "@/config/env";
+// This file is imported by client components (e.g. AdminSidebar), so it
+// must only ever touch NEXT_PUBLIC_* vars read directly off process.env —
+// Next.js inlines just that prefix into browser bundles. Going through the
+// shared `env` config (which also validates server-only secrets like
+// MONGODB_URI and JWT_SECRET) would drag those checks into client code,
+// where those vars are never present and validation would always fail.
+const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "").replace(/\/+$/, "");
 
 // The single file to edit when repurposing this CMS (Blog, News Portal,
 // Docs site, Knowledge Base, ...) — public-facing branding and nav live
@@ -7,7 +13,7 @@ export const siteConfig = {
   name: "WB Stories",
   tagline: "Business Stories That Matter",
   description: "Insights, updates, and stories from the world of business.",
-  url: env.NEXT_PUBLIC_SITE_URL.replace(/\/+$/, ""),
+  url: siteUrl,
   ogImage: "/images/og-default.png",
   builtBy: {
     name: "Zaploom Technologies",

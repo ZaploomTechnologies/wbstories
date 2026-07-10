@@ -1,6 +1,5 @@
 import { SignJWT } from "jose/jwt/sign";
 import { jwtVerify } from "jose/jwt/verify";
-import { env } from "@/config/env";
 import type { AdminJwtPayload } from "@/interfaces/jwt-payload.interface";
 
 // jose is WebCrypto-based (unlike jsonwebtoken, which needs Node's `crypto`),
@@ -9,7 +8,18 @@ import type { AdminJwtPayload } from "@/interfaces/jwt-payload.interface";
 // `jose/jwt/sign` and `jose/jwt/verify` entry points (instead of the root
 // barrel) keeps jose's JWE/compression code — which we never use and which
 // isn't Edge-runtime-supported — out of the bundle entirely.
-const secretKey = new TextEncoder().encode(env.JWT_SECRET);
+//
+// Reads process.env.JWT_SECRET directly rather than through the shared
+// `env` config: Next's Edge bundler (middleware imports this file) only
+// inlines env vars it can statically see as `process.env.KEY` — the config
+// module's `schema.safeParse(process.env)` is a dynamic whole-object read
+// that it can't analyze, so nothing gets inlined into the Edge bundle and
+// every field, including unrelated ones like MONGODB_URI, reads as undefined.
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  throw new Error("JWT_SECRET is required");
+}
+const secretKey = new TextEncoder().encode(JWT_SECRET);
 const ALGORITHM = "HS256";
 const EXPIRES_IN = "7d";
 

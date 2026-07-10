@@ -4,7 +4,7 @@ import { FileRepository } from "ckeditor5";
 // Routes in-editor image uploads (paste/drag-drop/toolbar insert) through the
 // same /api/upload endpoint the banner image uploader uses — one upload
 // service, reused, per the project's DRY requirement.
-class CloudinaryUploadAdapter implements UploadAdapter {
+class ImageUploadAdapter implements UploadAdapter {
   private readonly loader: FileLoader;
 
   constructor(loader: FileLoader) {
@@ -35,7 +35,7 @@ class CloudinaryUploadAdapter implements UploadAdapter {
   }
 }
 
-export function CloudinaryUploadAdapterPlugin(editor: Editor): void {
+export function ImageUploadAdapterPlugin(editor: Editor): void {
   editor.plugins.get(FileRepository).createUploadAdapter = (loader) =>
-    new CloudinaryUploadAdapter(loader);
+    new ImageUploadAdapter(loader);
 }
