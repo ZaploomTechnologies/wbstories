@@ -5,7 +5,12 @@
       "Bash(curl -s http://localhost:3000/ -o /dev/null -w \"%{http_code}\\\\n\")",
       "Bash(curl -s http://localhost:3001/ -o /dev/null -w \"%{http_code}\\\\n\")",
       "Bash(cat /tmp/dev.log 2>&1 | tail -50)",
-      "Read(//tmp/**)"
+      "Read(//tmp/**)",
+      "Bash(netstat -ano)",
+      "Bash(pm2 list *)",
+      "Bash(pm2 env *)",
+      "Read(//c/Users/Divya/.pm2/logs/**)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:4081)"
     ],
     "additionalDirectories": [
       "\\tmp"
