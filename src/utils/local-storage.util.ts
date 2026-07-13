@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { mkdir, unlink, writeFile } from "node:fs/promises";
+import { mkdir, stat, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 export interface LocalUploadResult {
@@ -23,8 +23,17 @@ export async function uploadImageBuffer(buffer: Buffer, mimeType: string): Promi
   const publicId = `${UPLOAD_SUBDIR}/${filename}`;
 
   const dir = path.join(UPLOAD_ROOT, UPLOAD_SUBDIR);
+  const filePath = path.join(dir, filename);
   await mkdir(dir, { recursive: true });
-  await writeFile(path.join(dir, filename), buffer);
+  await writeFile(filePath, buffer);
+
+  // TEMP DIAGNOSTIC — remove once the VPS upload path issue is confirmed fixed.
+  const written = await stat(filePath).catch((error: unknown) => {
+    console.error("[upload-diagnostic] stat FAILED right after writeFile:", filePath, error);
+    return null;
+  });
+  console.log("[upload-diagnostic] cwd:", process.cwd());
+  console.log("[upload-diagnostic] wrote to:", filePath, "size:", written?.size ?? "MISSING");
 
   return { url: `/uploads/${publicId}`, publicId };
 }
