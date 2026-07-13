@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { mkdir, stat, unlink, writeFile } from "node:fs/promises";
+import { mkdir, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 export interface LocalUploadResult {
@@ -8,7 +8,7 @@ export interface LocalUploadResult {
 }
 
 const UPLOAD_SUBDIR = "banners";
-const UPLOAD_ROOT = path.join(process.cwd(), "public", "uploads");
+export const UPLOAD_ROOT = path.join(process.cwd(), "public", "uploads");
 
 const EXTENSION_BY_MIME_TYPE: Record<string, string> = {
   "image/jpeg": ".jpg",
@@ -17,35 +17,32 @@ const EXTENSION_BY_MIME_TYPE: Record<string, string> = {
   "image/gif": ".gif",
 };
 
+// publicId is client-supplied in a couple of places (the "previousPublicId"
+// form field, and the GET route that serves these files back out) — resolve
+// and confirm it stays inside UPLOAD_ROOT before touching the filesystem, so
+// a crafted value like "../../.env" can't escape the uploads directory.
+export function resolveWithinUploadRoot(publicId: string): string | null {
+  const resolved = path.resolve(UPLOAD_ROOT, publicId);
+  const isWithinUploadRoot =
+    resolved === UPLOAD_ROOT || resolved.startsWith(UPLOAD_ROOT + path.sep);
+  return isWithinUploadRoot ? resolved : null;
+}
+
 export async function uploadImageBuffer(buffer: Buffer, mimeType: string): Promise<LocalUploadResult> {
   const extension = EXTENSION_BY_MIME_TYPE[mimeType] ?? "";
   const filename = `${randomUUID()}${extension}`;
   const publicId = `${UPLOAD_SUBDIR}/${filename}`;
 
   const dir = path.join(UPLOAD_ROOT, UPLOAD_SUBDIR);
-  const filePath = path.join(dir, filename);
   await mkdir(dir, { recursive: true });
-  await writeFile(filePath, buffer);
-
-  // TEMP DIAGNOSTIC — remove once the VPS upload path issue is confirmed fixed.
-  const written = await stat(filePath).catch((error: unknown) => {
-    console.error("[upload-diagnostic] stat FAILED right after writeFile:", filePath, error);
-    return null;
-  });
-  console.log("[upload-diagnostic] cwd:", process.cwd());
-  console.log("[upload-diagnostic] wrote to:", filePath, "size:", written?.size ?? "MISSING");
+  await writeFile(path.join(dir, filename), buffer);
 
   return { url: `/uploads/${publicId}`, publicId };
 }
 
-// publicId is client-supplied (the "previousPublicId" form field) — resolve
-// and confirm it stays inside UPLOAD_ROOT before touching the filesystem, so
-// a crafted value like "../../.env" can't be used to delete arbitrary files.
 export async function deleteImage(publicId: string): Promise<void> {
-  const resolved = path.resolve(UPLOAD_ROOT, publicId);
-  const isWithinUploadRoot =
-    resolved === UPLOAD_ROOT || resolved.startsWith(UPLOAD_ROOT + path.sep);
-  if (!isWithinUploadRoot) {
+  const resolved = resolveWithinUploadRoot(publicId);
+  if (!resolved) {
     return;
   }
 
