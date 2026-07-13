@@ -3,8 +3,8 @@ module.exports = {
     {
       name: "wbstories_admin",
 
-      script: "./node_modules/next/dist/bin/next",
-      args: "start",
+      script: "node",
+      args: "--env-file=.env.local ./node_modules/next/dist/bin/next start",
 
       cwd: "D:/zaploom_projects/wbstories/admin-app",
 
