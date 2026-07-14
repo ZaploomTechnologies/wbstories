@@ -1,4 +1,5 @@
-import { ContactForm } from "@/components/website/ContactForm";
+import { ContactInfo } from "@/components/website/ContactInfo";
+import { ContactMap } from "@/components/website/ContactMap";
 import { buildMetadata } from "@/helpers/metadata.helper";
 
 export const metadata = buildMetadata({
@@ -9,13 +10,10 @@ export const metadata = buildMetadata({
 
 export default function ContactPage() {
   return (
-    <div className="mx-auto max-w-xl px-4 py-16">
-      <h1 className="text-3xl font-bold tracking-tight">Contact Us</h1>
-      <p className="mt-2 text-muted-foreground">
-        Have a question or a story idea? Send us a message.
-      </p>
-      <div className="mt-8">
-        <ContactForm />
+    <div className="mx-auto max-w-6xl px-4 py-16">
+      <div className="grid gap-12 lg:grid-cols-2 lg:items-stretch lg:gap-16">
+        <ContactInfo />
+        <ContactMap />
       </div>
     </div>
   );

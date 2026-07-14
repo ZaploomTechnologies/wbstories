@@ -22,7 +22,13 @@ export const siteConfig = {
   socials: {
     linkedin: "https://linkedin.com/company/zaploom/",
     instagram: "https://www.instagram.com/zaploomtechnologies",
-    whatsapp: "https://wa.me/918200923860",
+    whatsapp: "https://wa.me/919033608708",
+  },
+  contact: {
+    addressLines: ["406, Square One Commercial, Bhimrad-Althan Rd", "Apcha Nagar, Surat, Gujarat 395017"],
+    email: "info@zaploom.in",
+    phones: ["+91 8200923860", "+91 9033608708"],
+    officeHours: ["Mon - Fri: 9:00 AM - 6:00 PM"],
   },
   nav: [
     { href: "/", label: "Home" },
