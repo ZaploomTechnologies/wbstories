@@ -152,6 +152,7 @@ const MEDIA_PROVIDERS = [
 
 export const CKEDITOR_BASE_CONFIG: Partial<EditorConfig> = {
   licenseKey: "GPL",
+  placeholder: "Tell your story...",
   toolbar: CKEDITOR_TOOLBAR,
   blockToolbar: CKEDITOR_BLOCK_TOOLBAR,
   image: {
