@@ -3,6 +3,7 @@ import { StoryGrid } from "@/components/website/StoryGrid";
 import { StoryPagination } from "@/components/website/StoryPagination";
 import { HomeHero } from "@/components/website/HomeHero";
 import { JsonLd } from "@/components/shared/JsonLd";
+import { VisitCounterChip } from "@/components/shared/VisitCounterChip";
 import { siteConfig } from "@/config/site.config";
 import { buildMetadata } from "@/helpers/metadata.helper";
 
@@ -38,6 +39,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         }}
       />
       <HomeHero />
+      <VisitCounterChip />
       <div id="latest-stories" className="mx-auto max-w-6xl scroll-mt-16 px-4 pt-4 pb-12 sm:pt-6 sm:pb-16">
         <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Business Stories</h2>
 

@@ -172,6 +172,40 @@
   animation: spin-slow 26s linear infinite;
 }
 
+@keyframes like-bounce {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.35);
+  }
+  60% {
+    transform: scale(0.92);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes like-confetti {
+  0% {
+    transform: translate(-50%, -50%) rotate(var(--confetti-angle)) translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(var(--confetti-angle)) translateY(-28px) scale(0.4);
+    opacity: 0;
+  }
+}
+
+.animate-like-bounce {
+  animation: like-bounce 0.4s ease-out;
+}
+
+.animate-like-confetti {
+  animation: like-confetti 0.6s ease-out forwards;
+}
+
 .ck-editor__editable_inline {
   min-height: 28rem;
   max-height: 65vh;

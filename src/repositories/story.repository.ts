@@ -5,7 +5,7 @@ import type { IStory, LeanStory, LeanStorySummary } from "@/interfaces/story.int
 
 // Excludes `content` — list/card views never need the full HTML body.
 const SUMMARY_PROJECTION =
-  "title slug bannerImage bannerVideo status publishedAt readingTime createdAt updatedAt";
+  "title slug bannerImage bannerVideo status publishedAt readingTime likesCount createdAt updatedAt";
 
 export interface ListStoriesParams {
   filter: QueryFilter<IStory>;
@@ -67,6 +67,15 @@ async function softDeleteById(id: string) {
   return StoryModel.findOneAndUpdate(
     { _id: id, isDeleted: false },
     { isDeleted: true },
+    { new: true },
+  ).lean<LeanStory | null>();
+}
+
+async function incrementLikesCount(id: string, delta: number) {
+  await connectToDatabase();
+  return StoryModel.findOneAndUpdate(
+    { _id: id, isDeleted: false },
+    { $inc: { likesCount: delta } },
     { new: true },
   ).lean<LeanStory | null>();
 }
@@ -135,6 +144,7 @@ export const StoryRepository = {
   existsBySlug,
   updateById,
   softDeleteById,
+  incrementLikesCount,
   findLatest,
   findRelated,
   findPreviousPublished,

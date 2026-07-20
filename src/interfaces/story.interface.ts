@@ -22,6 +22,7 @@ export interface IStory extends Document {
   publishedAt: Date | null;
   readingTime: number;
   isDeleted: boolean;
+  likesCount: number;
   createdAt: Date;
   updatedAt: Date;
 }

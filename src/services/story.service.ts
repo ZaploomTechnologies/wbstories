@@ -28,6 +28,7 @@ function toStoryDTO(doc: LeanStory): StoryDTO {
     status: doc.status,
     publishedAt: doc.publishedAt ? toISODate(doc.publishedAt) : null,
     readingTime: doc.readingTime,
+    likesCount: doc.likesCount ?? 0,
     createdAt: toISODate(doc.createdAt),
     updatedAt: toISODate(doc.updatedAt),
   };
@@ -43,6 +44,7 @@ function toStorySummaryDTO(doc: LeanStorySummary): StorySummaryDTO {
     status: doc.status,
     publishedAt: doc.publishedAt ? toISODate(doc.publishedAt) : null,
     readingTime: doc.readingTime,
+    likesCount: doc.likesCount ?? 0,
     createdAt: toISODate(doc.createdAt),
     updatedAt: toISODate(doc.updatedAt),
   };

@@ -58,6 +58,11 @@ const StorySchema = new Schema<IStory>(
       type: Boolean,
       default: false,
     },
+    likesCount: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
   },
   { timestamps: true },
 );

@@ -7,6 +7,7 @@ import { StorySidebar } from "@/components/website/StorySidebar";
 import { SocialShareButtons } from "@/components/shared/SocialShareButtons";
 import { Breadcrumb } from "@/components/shared/Breadcrumb";
 import { JsonLd } from "@/components/shared/JsonLd";
+import { LikeButton } from "@/components/shared/LikeButton";
 import { formatDate } from "@/helpers/date.helper";
 import { buildMetadata } from "@/helpers/metadata.helper";
 import { htmlToPlainText, truncateText, youtubeThumbnailUrl } from "@/helpers/text.helper";
@@ -105,6 +106,8 @@ export default async function StoryPage({ params }: StoryPageProps) {
 
         <StorySidebar upNext={adjacent.next} related={related} />
       </div>
+
+      <LikeButton slug={story.slug} initialTotalLikes={story.likesCount} />
     </div>
   );
 }

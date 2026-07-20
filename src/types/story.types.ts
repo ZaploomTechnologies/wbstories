@@ -10,6 +10,7 @@ export interface StoryDTO {
   status: StoryStatus;
   publishedAt: string | null;
   readingTime: number;
+  likesCount: number;
   createdAt: string;
   updatedAt: string;
 }
