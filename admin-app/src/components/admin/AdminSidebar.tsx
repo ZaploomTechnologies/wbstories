@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, FileText, Settings } from "lucide-react";
+import { LayoutDashboard, FileText, Quote, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { siteConfig } from "@/config/site.config";
 
 const NAV_ITEMS = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard },
   { href: "/stories", label: "Stories", icon: FileText },
+  { href: "/quotes", label: "Quotes", icon: Quote },
 ];
 
 export function AdminSidebar() {

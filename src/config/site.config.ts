@@ -31,7 +31,8 @@ export const siteConfig = {
     officeHours: ["Mon - Fri: 9:00 AM - 6:00 PM"],
   },
   nav: [
-    { href: "/", label: "Home" },
+    { href: "/", label: "Stories" },
+    { href: "/quotes", label: "Quotes" },
     { href: "/about", label: "About" },
     { href: "/contact", label: "Contact" },
   ],
