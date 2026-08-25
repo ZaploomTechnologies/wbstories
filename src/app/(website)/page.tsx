@@ -1,15 +1,10 @@
 import { StoryService } from "@/services/story.service";
-import { StoryGrid } from "@/components/website/StoryGrid";
-import { StoryPagination } from "@/components/website/StoryPagination";
+import { StoryGridWithInfiniteScroll } from "@/components/website/StoryGridWithInfiniteScroll";
 import { HomeHero } from "@/components/website/HomeHero";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { VisitCounterChip } from "@/components/shared/VisitCounterChip";
 import { siteConfig } from "@/config/site.config";
 import { buildMetadata } from "@/helpers/metadata.helper";
-
-interface HomePageProps {
-  searchParams: Promise<{ page?: string }>;
-}
 
 export const metadata = buildMetadata({
   title: siteConfig.tagline,
@@ -17,12 +12,9 @@ export const metadata = buildMetadata({
   path: "/",
 });
 
-export default async function HomePage({ searchParams }: HomePageProps) {
-  const params = await searchParams;
-  const page = Number(params.page) || 1;
-
+export default async function HomePage() {
   const latest = await StoryService.listPublicStories({
-    page,
+    page: 1,
     limit: 9,
     sortBy: "publishedAt",
     order: "desc",
@@ -44,10 +36,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Business Stories</h2>
 
         <div className="mt-10">
-          <StoryGrid stories={latest.items} />
-        </div>
-        <div className="mt-10">
-          <StoryPagination page={latest.meta.page} totalPages={latest.meta.totalPages} />
+          <StoryGridWithInfiniteScroll initialItems={latest.items} initialMeta={latest.meta} />
         </div>
       </div>
     </>
