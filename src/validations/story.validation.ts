@@ -7,7 +7,12 @@ export const createStorySchema = z.object({
   status: z.enum(["draft", "published"]).default("draft"),
 });
 
-export const updateStorySchema = createStorySchema.partial();
+// Not createStorySchema.partial() — Zod's .partial() drops requiredness but
+// keeps .default("draft") active, so an update payload that simply omits
+// status would get "draft" silently defaulted in and unpublish the story.
+export const updateStorySchema = createStorySchema.omit({ status: true }).partial().extend({
+  status: z.enum(["draft", "published"]).optional(),
+});
 
 export const adminStoryListQuerySchema = paginationQuerySchema
   .merge(searchQuerySchema)

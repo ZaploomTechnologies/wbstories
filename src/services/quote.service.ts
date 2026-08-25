@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { QuoteRepository } from "@/repositories/quote.repository";
 import { ApiError } from "@/helpers/api-error";
 import { buildQuoteSearchFilter } from "@/helpers/search-query.helper";
@@ -46,6 +47,7 @@ export const QuoteService = {
       publishedAt,
     });
 
+    revalidatePath("/quotes");
     return toQuoteDTO(created);
   },
 
@@ -68,6 +70,7 @@ export const QuoteService = {
       throw ApiError.notFound("Quote not found");
     }
 
+    revalidatePath("/quotes");
     return toQuoteDTO(updated);
   },
 
@@ -76,6 +79,8 @@ export const QuoteService = {
     if (!deleted) {
       throw ApiError.notFound("Quote not found");
     }
+
+    revalidatePath("/quotes");
   },
 
   async getByIdForAdmin(id: string): Promise<QuoteDTO> {

@@ -13,7 +13,12 @@ export const createQuoteSchema = z.object({
   status: z.enum(["draft", "published"]).default("draft"),
 });
 
-export const updateQuoteSchema = createQuoteSchema.partial();
+// Not createQuoteSchema.partial() — Zod's .partial() drops requiredness but
+// keeps .default("draft") active, so an update payload that simply omits
+// status would get "draft" silently defaulted in and unpublish the quote.
+export const updateQuoteSchema = createQuoteSchema.omit({ status: true }).partial().extend({
+  status: z.enum(["draft", "published"]).optional(),
+});
 
 export const adminQuoteListQuerySchema = paginationQuerySchema
   .merge(searchQuerySchema)
